@@ -5,7 +5,7 @@ window.geometry('600x800+1000+300')
 window.title("RainBow")
 
 l = Label(window)
-e = Entry(window)
+e = Entry(window, justify='center')
 l.pack(fill=X)
 e.pack(fill=X)
 
@@ -27,12 +27,21 @@ class ButtonRainBow:
         e.insert(0, string=self.color)
 
 
-but2 = ButtonRainBow("red", "Красный")
-but2 = ButtonRainBow("orange", "Оранжевый")
-but2 = ButtonRainBow("yellow", "Желтый")
-but2 = ButtonRainBow("green", "Зеленый")
-but2 = ButtonRainBow("light blue", "Голубой")
-but2 = ButtonRainBow("blue", "Синий")
-but2 = ButtonRainBow("purple", "Фиолетовый")
+color = {
+    'red': 'Красный',
+    'orange': 'Оранжевый',
+    'yellow': 'Желтый',
+    'green': 'Зеленый',
+    'light blue': 'Голубой',
+    'blue': 'Синий',
+    'purple': 'Фиолетовый',
+}
 
+
+def makeButton():
+    for but in color.items():
+        but2 = ButtonRainBow(but[0], but[1])
+
+
+makeButton()
 window.mainloop()
