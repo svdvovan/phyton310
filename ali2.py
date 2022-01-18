@@ -23,11 +23,11 @@ excel_sheet['D1'] = 'Категория'
 excel_sheet['E1'] = 'Описание'
 
 for url in urls:
-    countCol = 5
+    countCol = 6
     countFoto = 1
     CountP = 1
-    CountPn = 16
-    CountPnZ = 17
+    CountPn = 17
+    CountPnZ = 18
     CountPZZ = 1
     largeFoto2 = []
     page = requests.get(url)
