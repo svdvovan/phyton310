@@ -19,7 +19,8 @@ countRow = 2
 excel_sheet['A1'] = 'id'
 excel_sheet['B1'] = 'Название'
 excel_sheet['C1'] = 'Цена'
-excel_sheet['D1'] = 'Описание'
+excel_sheet['D1'] = 'Категория'
+excel_sheet['E1'] = 'Описание'
 
 for url in urls:
     countCol = 5
@@ -52,7 +53,8 @@ for url in urls:
     # excel_sheet[f'A{count}'] = name
     excel_sheet[f'B{count}'] = name
     excel_sheet[f'C{count}'] = price
-    excel_sheet[f'D{count}'] = description
+    excel_sheet[f'D{count}'] = "игрушки"
+    excel_sheet[f'E{count}'] = description
 
     for f in foto:
         largeFoto = f['src']
