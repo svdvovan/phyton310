@@ -16,6 +16,8 @@ excel_sheet = excel_file.create_sheet(title='ali2', index=0)
 
 count = 2
 countRow = 2
+
+
 def bigParser(e_url):
     global count
     global countRow
@@ -32,7 +34,6 @@ def bigParser(e_url):
     CountPnZ = 18
     CountPZZ = 1
     largeFoto2 = []
-
 
     for url in e_url:
 
@@ -94,22 +95,17 @@ def bigParser(e_url):
             count += 1
             countRow += 1
 
-
     excel_file.save(fileName)
 
 
 def getUrl():
     print(e_url.get())
     urls = [e_url.get()]
-    # # e_url2 = e_url.get()
     bigParser(urls)
 
 
-def clear():
-    e_url.delete(0, END)
-
-
 l_start = Button(root, text="Парсить", command=getUrl).grid(row=1, column=0, padx=10, pady=10, sticky=W)
-l_clear = Button(root, text="Очистить", command=clear).grid(row=1, column=1, padx=0, pady=10, sticky=W)
+l_clear = Button(root, text="Очистить", command=lambda: e_url.delete(0, END)).grid(row=1, column=1, padx=0, pady=10,
+                                                                                   sticky=W)
 l_close = Button(root, text="Закрыть", command=lambda: root.destroy()).grid(row=1, column=1, padx=20, pady=10, sticky=E)
 root.mainloop()
