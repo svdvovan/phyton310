@@ -7,6 +7,7 @@ import csv
 import pandas as pd
 import openpyxl
 
+
 # url = 'https://aliexpress.ru/item/1005001806483824.html?sku_id=12000017698985198&spm=a2g2w.productlist.0.0.6a1a1adeZPFypA'
 # url = 'https://aliexpress.ru/item/4001193458040.html?spm=a2g2w.productlist.0.0.4793620coMJbLf'
 from openpyxl import Workbook

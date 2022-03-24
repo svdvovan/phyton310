@@ -5,13 +5,12 @@ import openpyxl
 from openpyxl import Workbook
 
 urls = [
-    'https://aliexpress.ru/item/1005001465081562.html?spm=a2g20.search.0.0.5d9f39d7iO6QQb&algo_pvid=5d1dd444-7edd-4673-b275-d97a298ad63a&algo_expid=5d1dd444-7edd-4673-b275-d97a298ad63a-12',
-    'https://aliexpress.ru/item/1005001592825712.html?_evo_buckets=165609%2C165598%2C188872%2C194277%2C224411%2C224373%2C176818&_t=gps-id%3ApcDetailBottomMoreThisSeller%2Cscm-url%3A1007.13339.169870.0%2Cpvid%3Ad8a27357-3570-41a7-8c62-fdf5f9a172c9%2Ctpp_buckets%3A21387%230%23233228%2310&gps-id=pcDetailBottomMoreThisSeller&pvid=d8a27357-3570-41a7-8c62-fdf5f9a172c9&scm=1007.13339.169870.0&scm-url=1007.13339.169870.0&scm_id=1007.13339.169870.0&sku_id=12000016713342689&spm=a2g2w.detail.0.0.36fe4ab0ve7lA4',
-    'https://aliexpress.ru/item/1005003556155048.html?_evo_buckets=165609%2C165598%2C188871%2C194277%2C224411%2C224373%2C176818&_t=gps-id%3ApcDetailBottomMoreThisSeller%2Cscm-url%3A1007.13339.169870.0%2Cpvid%3Aa3e45df8-7ac5-4603-b472-8ade50e24cb0%2Ctpp_buckets%3A21387%230%23233228%238&gps-id=pcDetailBottomMoreThisSeller&item_id=1005003556155048&pvid=a3e45df8-7ac5-4603-b472-8ade50e24cb0&scm=1007.13339.169870.0&scm-url=1007.13339.169870.0&scm_id=1007.13339.169870.0&sku_id=12000026278135346&spm=a2g2w.detail.1000013.1.663d1e95JTc5BA'
-]
+'https://aliexpress.ru/item/1005003128153109.html?_evo_buckets=165609%2C165598%2C188873%2C194277%2C224411%2C224373%2C176818&_t=gps-id%3ApcDetailBottomMoreThisSeller%2Cscm-url%3A1007.13339.169870.0%2Cpvid%3A4e4c1aab-c87e-4f7a-9f92-c07e78ca4648%2Ctpp_buckets%3A21387%230%23233228%237&gps-id=pcDetailBottomMoreThisSeller&item_id=1005003128153109&pvid=4e4c1aab-c87e-4f7a-9f92-c07e78ca4648&scm=1007.13339.169870.0&scm-url=1007.13339.169870.0&scm_id=1007.13339.169870.0&sku_id=12000024247949944&spm=a2g2w.detail.0.0.5aa54ab0lp9IY1',
+ 'https://aliexpress.ru/item/4001365670391.html?_evo_buckets=165609%2C165598%2C188873%2C194277%2C224411%2C224373%2C176818&_t=gps-id%3ApcDetailBottomMoreThisSeller%2Cscm-url%3A1007.13339.169870.0%2Cpvid%3A26a1e084-95cd-43e6-adc3-ee5dfe11ddd6%2Ctpp_buckets%3A21387%230%23233228%232&gps-id=pcDetailBottomMoreThisSeller&item_id=4001365670391&pvid=26a1e084-95cd-43e6-adc3-ee5dfe11ddd6&scm=1007.13339.169870.0&scm-url=1007.13339.169870.0&scm_id=1007.13339.169870.0&sku_id=10000015809183410&spm=a2g2w.detail.1000013.1.742f6460Fwn0N',
+    ]
 
 fileName = 'ali.xlsx'
-
+# TODO БАнеры отсюда https://aliexpress.ru/store/910355216?spm=a2g2w.detail.100005.3.34b47ca3jcgAnh   и здесь же товары
 excel_file = Workbook()
 excel_sheet = excel_file.create_sheet(title='ali2', index=0)
 count = 2
@@ -50,7 +49,7 @@ for url in urls:
     print(price)
     print(name)
 
-    # excel_sheet[f'A{count}'] = name
+    # excel_sheet[f'A{count}'] = id
     excel_sheet[f'B{count}'] = name
     excel_sheet[f'C{count}'] = price
     excel_sheet[f'D{count}'] = "игрушки"
