@@ -4,15 +4,19 @@ from bs4 import BeautifulSoup
 import requests
 from openpyxl import Workbook
 from tkinter import *
+from tkinter import filedialog
 import urllib3
 import urllib.request
 import random
+import json
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0'}
 
 root = Tk()
-root.geometry('850x300+1000+300')
+root.title("Парсер")
+root.geometry('850x400+1000+300')
+isDownload = IntVar()
 
 l_url = Label(root, text="Введите url страницы категории:").grid(row=0, column=0, pady=10)
 e_url = Entry(root, width=100)
@@ -43,20 +47,25 @@ e_dir = Entry(root, width=50)
 e_dir.insert(0, "1_download")
 e_dir.grid(row=5, column=1, padx=15, sticky=W)
 
+l_isDownload_ = Label(root, text="Скачать фото?").grid(row=6, column=0, pady=10)
+isDownload_checkbutton = Checkbutton(text="Скачать", variable=isDownload).grid(row=6, column=1, pady=10, sticky=W)
+
 excel_file = Workbook()
 excel_sheet = excel_file.create_sheet(title='genetrip2', index=0)
 
 count = 2
 countRow = 2
 
-def createDir(catName, index, dir):
+
+def createDir(catName, dir):
     dirName = f'{dir}_{catName}'
     try:
         mkdir(dirName)
     except:
         print('папка существует')
 
-def bigParser(e_url, page, lastPage, catName, index, dir):
+
+def bigParser(e_url, page, lastPage, catName, index, dir, isDownload2):
     global count
     global countRow
     for p in range(page, lastPage + 1):
@@ -96,32 +105,38 @@ def bigParser(e_url, page, lastPage, catName, index, dir):
                     soup = BeautifulSoup(pageTovar.content, 'html.parser')
 
                     name = soup.find('h1', class_='h1-prod-name').getText()
-##############################################################
+                    ##############################################################
                     try:
                         mainFoto = soup.find('a', id="zoom1").get('href')
-                        # nameFotoUrl = mainFoto.split("/")[-1]
                         req = urllib.request.Request(url=mainFoto, headers=headers)
                         urlImg = urllib.request.urlopen(req).read()
-                        out = open(f'{dir}_{catName}/{nameFoto(mainFoto)}', "wb")
-                        out.write(urlImg)
-                        out.close
-                        excel_sheet[f'G{count}'] = nameFoto(mainFoto)
+                        if (isDownload2 == 1):
+                            out = open(f'{dir}_{catName}/{nameFoto(mainFoto)}', "wb")
+                            excel_sheet[f'G{count}'] = nameFoto(mainFoto)
+                            out.write(urlImg)
+                            out.close
+                        else:
+                            excel_sheet[f'G{count}'] = mainFoto
 
-##################################################################
                     except:
                         mainFoto = ''
+                    ##################################################################
                     try:
                         foto = soup.find('div', class_='image-additional owl-carousel').find_all('a',
                                                                                                  class_='thumbnail')
                         for f in foto:
                             largeFoto = f['href']
-                            # nameFotoUrl = largeFoto.split("/")[-1]
                             req = urllib.request.Request(url=largeFoto, headers=headers)
                             urlImg = urllib.request.urlopen(req).read()
-                            out = open(f'{dir}_{catName}/{nameFoto(largeFoto)}', "wb")
-                            out.write(urlImg)
-                            out.close
-                            largeFoto2.append(nameFoto(largeFoto))
+
+                            if (isDownload2 == 1):
+                                out = open(f'{dir}_{catName}/{nameFoto(largeFoto)}', "wb")
+                                out.write(urlImg)
+                                out.close
+                                largeFoto2.append(nameFoto(largeFoto))
+                            else:
+                                # nameFotoUrl = largeFoto.split("/")[-1]
+                                largeFoto2.append(largeFoto)
                         print(largeFoto2)
 
                         for fot in largeFoto2:
@@ -131,6 +146,7 @@ def bigParser(e_url, page, lastPage, catName, index, dir):
                             countCol += 1
                     except:
                         foto = ''
+                    ##################################################################
                     id = soup.find(itemprop="model").getText()
                     price = soup.find('span',
                                       class_='autocalc-product-price').getText()
@@ -164,12 +180,6 @@ def bigParser(e_url, page, lastPage, catName, index, dir):
                     excel_sheet[f'E{count}'] = description
                     excel_sheet[f'F{count}'] = manufac
 
-                    # for fot in largeFoto2:
-                    #     excel_sheet.cell(row=1, column=countCol).value = f'фото{countFoto}'
-                    #     excel_sheet.cell(row=countRow, column=countCol).value = fot
-                    #     countFoto += 1
-                    #     countCol += 1
-
                     datas = [i.get_text(strip=True) for i in svoistva]
                     datas2 = [i.get_text() for i in svoistva_znach]
 
@@ -198,8 +208,9 @@ def getUrl():
     page = int(e_page.get())
     lastPage = int(e_lastPage.get())
     dir = e_dir.get()
-    createDir(catName, index, dir)
-    bigParser(urls, page, lastPage, catName, index, dir)
+    createDir(catName, dir)
+    isDownload2 = isDownload.get()
+    bigParser(urls, page, lastPage, catName, index, dir, isDownload2)
 
 
 def clearAll():
@@ -210,16 +221,44 @@ def clearAll():
 def nameFoto(mainFoto):
     sizeFoto = mainFoto.split("/")[-1]
     if (len(sizeFoto)) > 10:
-        # print(
-        #     f'Обрезанное имя:{os.path.splitext(sizeFoto)[0][:10]}{random.randint(0, 1000)}{os.path.splitext(sizeFoto)[1]}')
         mainFoto = f'{os.path.splitext(sizeFoto)[0][:10]}{random.randint(0, 1000)}{os.path.splitext(sizeFoto)[1]}'
         return mainFoto
 
 
-l_start = Button(root, text="Парсить", command=getUrl).grid(row=6, column=0, padx=10, pady=10, sticky=W)
-# l_clear = Button(root, text="Очистить", command=lambda: e_url.delete(0, END)).grid(row=5, column=1, padx=0, pady=10,
-#                                                                                    sticky=W)
-l_clear = Button(root, text="Очистить URL/Категорию", command=clearAll).grid(row=6, column=1, padx=0, pady=10,
+def openConfigFile():
+    openFile = filedialog.askopenfilename(title="Выбор файла конфигурации", defaultextension=".json",
+                                          filetypes=(("JSON", "*.json"),))
+    with open(openFile, encoding='utf-8') as json_file:
+        data = json.load(json_file)
+        print(data)
+        for p in data['config']:
+            e_catName.insert(1, (p['name']))
+            e_url.insert(1, (p['url']))
+
+
+
+def saveConfigFile():
+    saveFile = filedialog.asksaveasfilename(defaultextension=".json",
+                                            filetypes=(("JSON files", "*.json"),
+                                                       ))
+    data = {
+        'config': [{
+            'name' : e_catName.get(),
+            'url': e_url.get()
+        }
+        ]
+    }
+    with open(saveFile, "w") as write_file:
+        json.dump(data, write_file, ensure_ascii=False)
+
+
+l_start = Button(root, text="Парсить", command=getUrl).grid(row=8, column=0, padx=10, pady=10, sticky=W)
+l_clear = Button(root, text="Очистить URL/Категорию", command=clearAll).grid(row=8, column=1, padx=0, pady=10,
                                                                              sticky=W)
-l_close = Button(root, text="Закрыть", command=lambda: root.destroy()).grid(row=6, column=1, padx=20, pady=10, sticky=E)
+l_close = Button(root, text="Закрыть", command=lambda: root.destroy()).grid(row=8, column=1, padx=20, pady=10, sticky=E)
+
+l_open = Button(root, text="Загрузить конфу", command=lambda: openConfigFile()).grid(row=9, column=0, padx=10, pady=10,
+                                                                                     sticky=W)
+l_save = Button(root, text="Сохранить конфу", command=lambda: saveConfigFile()).grid(row=9, column=1, padx=10, pady=10,
+                                                                                     sticky=W)
 root.mainloop()
